@@ -1,0 +1,197 @@
+/* Mobile & Tablet */
+@media (max-width: 1023px) {
+    .hide-on-mobile-tablet {
+        display: none;
+    }
+    
+    .header__cart-notice {
+        top: -6px;
+        right: -3px;
+    }
+
+    .header__cart-listed {
+        position: fixed;
+        top: var(--header-height);
+        right: 0;
+        width: 100%;
+
+    }
+
+    .header__cart-listed::after {
+        display: none;
+    }
+
+    .header {
+        position: fixed;
+        z-index: 10;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }
+
+    .app__container {
+        margin-top: calc(var(--header-height) + var( --header-sort-bar-height));
+        padding-top: 8px;
+    }
+
+    .header__sort-bar {
+        display: flex;
+    }
+
+    .mobile-category {
+        display: block;
+    }
+
+    .mobile-category__item:hover {
+        background-color: aquamarine;
+    }
+}
+
+/* Độ phân giải tại 1039px thì phần navbar phía trên bị "sụp" xuống thì ẩn nó đi */
+@media (max-width: 1039px) {
+    :root {
+        --header-height: 68px;
+        --search-part-height: 68px;
+    }
+    .hide-on-mobile-tablet {
+        display: none;
+    }
+
+}
+
+/* Tablet */
+@media (min-width: 740px) and (max-width: 1023px) {
+    :root {
+        --header-height: 68px;
+        --search-part-height: 68px;
+    }
+
+    .hide-on-tablet {
+        display: none;
+    }
+
+    .header__cart {
+        width: 80px;
+        text-align: right;
+    }
+
+}
+
+/* Mobile */
+@media (max-width: 739px) {
+    :root {
+        --header-height: 54px;
+        --search-part-height: 54px;
+    }
+
+    .hide-on-mobile {
+        display: none;
+    }
+
+    .header__cart-notice {
+        top: -6px;
+        right: -3px;
+    }
+
+    .header-with-search {
+        justify-content: space-between;
+    }
+
+    
+    .header__cart,
+    .header__logo {
+        width: unset;
+    }
+
+    .search-part {
+        padding: 0;
+    }
+
+    .header__mobile-search {
+        display: block;
+    }
+
+    .header__search {
+        position: fixed;
+        top: var(--header-height);
+        height: 46px;
+        z-index: 1;
+        opacity: 1;
+        left: 0;
+        right: 0;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        padding: 0 16px;
+        animation: mobileSearchSideIn linear 0.3s;
+        display: none;
+    }
+
+    @keyframes mobileSearchSideIn {
+        from {
+            top: calc(var(--header-height) / 2);
+            opacity: 0;
+        }
+        to {
+            top: var(--header-height);
+            opacity: 1;
+        }
+    }
+
+    label[for="mobile-search-checkbox"] {
+        display: block;
+    }
+    
+    .header__search-history {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: calc(var(--header-height) + var(--header-sort-bar-height));
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .pagination-item {
+        margin: 0 4px;
+    }
+
+    .pagination-item__link {
+        --height: 28px;
+        font-size: 1.6rem;
+        min-width: 36px;
+    }
+
+    .header__logo-img {
+        width: 110px;
+    }
+
+    .footer__content {
+        padding: 0 16px;
+    }
+
+    .footer__heading {
+        text-align: center;
+    }
+
+    .footer-list{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer__download {
+        position: relative;
+        right: -6px;
+    }
+
+    /* .footer__qr-download-app-img {
+        padding: 6px 8px;
+        width: 80%;
+    } */
+
+    .footer__qr-download-app-link {
+        width: 150%;
+    }
+    
+    .footer__qr-img  {
+        width: 47%;
+    }
+}

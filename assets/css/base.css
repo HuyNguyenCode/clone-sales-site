@@ -1,0 +1,267 @@
+:root {
+    --primary-color: #fb5533;
+    --white-color:white;
+    --black-color: #000;
+    --text-color: #333;
+    --border-coler: #dbdbdb;
+    --start-gold-color: #FFCE3E;
+    --header-height: 120px;
+    --header-sort-bar-height: 46px;
+    --navbar-height: 34px;
+    --search-part-height:calc(var(--header-height) - var(--navbar-height))
+}
+
+*{ /*Apply CSS lên tất cả các phần tử CSS được nhúng file base.css*/
+    box-sizing: inherit; 
+    /*box-sizing: inherit có nghĩa là thẻ nào mà nằm trong một thẻ có thuộc tính boxizing thì thẻ đó sẽ được kế 
+    thừa thuộc tính này luôn, có nghĩa là thẻ đó cũng có thuộc tính boxsizing luôn*/
+}
+
+html {
+    /* Mặc định trên các trình duyệt, font-size: 100% = 16px */
+    font-size: 62.5%; /*Set kích cỡ chữ*/
+    /* Khi để font-size là 100% thì lúc này 1rem tương đương 16px, vậy thì muốn 12px thì phải chia ra số rem 
+    rất lẻ và không chính xác
+    Do đó ta để font-size là 62.5%, lúc này 1rem = 10px, từ đó muốn 12px thì chỉ cần để 1.2rem là xong
+    */
+    line-height: 1.6rem; /*Set độ cao mặc định cho đa phần các chữ trên trang web là 16px*/
+    font-family: 'Roboto', sans-serif; /*Nhúng font*/
+    box-sizing: border-box; /* làm chủ được kích thước của một phần tử dựa vào thuộc tính width và height đã 
+    được thiết lập bên trong.*/
+    /*Đã set thuộc tính box-sizing: inherit; nên thẻ nào nằm trong thẻ html (thẻ lớn nhất) sẽ đều có được thuộc
+    tính box-sizing: border-box;*/
+}
+
+/*Chuẩn bị một số class nền tảng để làm reponsive*/
+/* .grid { */
+
+    /*Màn hình có kích thước lớn hơn 1200px thì kích thước chiều ngang tối đa của class này chỉ 
+    là 1230px*/
+    /* width: 1230px;  */
+    
+    /*Màn hình có kích thước nhỏ hơn 1200px class này sẽ phát huy tác dụng nó giảm kích thước 
+    của class bằng kích thước của màn hình*/
+    /* max-width: 100%;  */
+    
+    /*Tự căn giữa một khối khi khối đó nằm trong khối khác*/
+    /* margin: 0 auto;  */
+
+/* } */
+
+/*Khi không muốn width = 1200px thì dùng class này */
+/* .grid__full-width {
+    width: 100%; 
+} */
+
+/* Sau khi làm responsive bằng thư viện grid.css thì sẽ xóa 2 class trên */
+
+/*Các thẻ chứa class này sẽ nằm trên 1 hàng ngang nhờ main axit của flex*/
+.grid__row {
+    display: flex;
+    flex-wrap: wrap; /*Tổng độ dài của các phần tử nằm trong class này mà vượt quá kích thước của class này sẽ 
+    auto xuống hàng */
+    /* Ta quy định khoảng cách giữa các cột, hay có thể hiểu là khoảng cách giữa các thành phần trong 1 hàng 
+    theo nguyên tắc là 10px, do đó mỗi phần tử cần margin sang 2 bên -5px */
+    margin-left: -5px;
+    margin-right: -5px;
+    /* =====================================================================================================*/
+}
+
+/*Test*/
+.grid__column-2 {
+    /* Ta quy định khoảng cách giữa các cột, hay có thể hiểu là khoảng cách giữa các thành phần trong 1 hàng 
+    theo nguyên tắc là 10px, do đó mỗi phần tử cần padding sang 2 bên 5px */
+    padding-left: 5px;
+    padding-right: 5px;
+    /* =====================================================================================================*/
+    width: 16.6667%; /*Độ rộng của mỗi phần tử, ở đây ta tạm tính nó như vậy, khi học responsive sẽ có cách
+    để nó tự tính ra ra width mà ta không cần tính ra*/
+}
+
+.grid__column-10 {
+    /* Ta quy định khoảng cách giữa các cột, hay có thể hiểu là khoảng cách giữa các thành phần trong 1 hàng 
+    theo nguyên tắc là 24px, do đó mỗi phần tử cần padding sang 2 bên 5px */
+    padding-left: 5px;
+    padding-right: 5px;
+    /* =====================================================================================================*/
+    width: 83.3334%;/*Độ rộng của mỗi phần tử, ở đây ta tạm tính nó như vậy, khi học responsive sẽ có cách
+    để nó tự tính ra ra width mà ta không cần tính ra*/
+}
+
+.grid__column-2-4 {
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 20%;
+}
+
+/*=========================================================================*/
+
+
+/**========================================== Keyframes ======================================*/
+@keyframes fadeIn {
+    from { 
+        opacity: 0
+    }
+    to { 
+        opacity: 1
+    }
+}
+
+@keyframes growth {
+    from { 
+        transform: scale(var(--growth-form));
+    }
+    to { 
+        transform: scale(var(--growth-to));
+    }
+}
+
+/**========================================== Button style ======================================*/
+
+.btn{
+    min-width: 142px; /*Chiều ngang tối thiểu của một nút*/
+    height: 34px; /*Chiều cao của một nút*/
+    text-decoration: none; /*Bỏ gạch chân chữ trong nút*/
+    border: none;/*Bỏ boder nút*/
+    border-radius: 2px; /*Bo góc nút*/
+    outline: none; /*Bỏ outline nút*/
+    cursor: pointer;   /*Set con trỏ nút*/
+    font-size: 1.4rem; /*Độ lớn chữ trong nút*/
+    color:var(--text-color);  /*Màu chữ tong nút*/
+    padding: 0 12px; /*Padding chữ trong nút*/
+    display: inline-flex; /*flex vào chữ trong nút*/
+    align-items: center; /*Căn giữa chữ trong nút theo chiều cao*/
+    justify-content: center; /*Căn giữa chữ trong nút theo chiều ngang*/
+    line-height: 1.6rem; /*line-height là chiều cao của một dòng, nếu để số lẻ thì nó sẽ bị chênh lên 
+    so với nút, nên để so chẵn thì chữ sẽ nằm giữa nút*/
+}
+
+/*Nút nhỏ*/
+.btn.btn--size-s {
+    height: 32px; /*Giảm chiều cao nút*/
+    padding: 0 8px; /*Giảm padding chữ trong nút*/
+    font-size: 12px; /*Giảm kích thước chữ*/
+}
+
+.btn.btn--normal:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+/*Màu Nút chính*/
+.btn.btn--primary {
+    color:var(--white-color); /*Màu chữ của các nút chính*/
+    background-color: var(--primary-color); /*Màu background của các nút chính*/
+}
+
+/*Nút bị disabled*/
+.btn.btn--disabled {
+    color: #949494;/*Màu nút khi bị mờ*/
+    cursor: default; /*Con trỏ thành mặc định */
+    background-color: #c3c3c3; /*Màu background xám đi*/
+}
+
+/*Nút chọn ở ô inut*/
+.select-input {
+    position: relative;
+    min-width: 200px; /*Chiều rộng của nút*/
+    height: 34px; /*Chiều cao của nút*/
+    padding: 0 12px; /*Độ dày của nút*/
+    border-radius: 2px; /*Bo cong nút*/
+    background-color: var(--white-color); /*Màu nút*/
+    display: flex; /*Flex vào icon và chữ bên trong nút*/
+    align-items: center; /*Căn giữa chữ và icon*/
+    justify-content: space-between; /*Đẩy chữ và icon ra xa nhau*/
+    z-index: -1; /*Cho ô input này chìm xuống*/
+}
+
+/**========================================== Select input style ======================================*/
+.select-input:hover .select-input__list{
+    display: block;
+}
+
+/*Chữ trong select input*/
+.select-input__lable {
+    font-size: 1.4rem; /*Cỡ chữ*/
+}
+
+/*Icon trong select input*/
+.select-input__icon {
+    font-size: 1.4rem; /*Cỡ icon*/
+    color: rgb(131,131,131);/*Màu icon*/
+    /*Căn icon thẳng hàng với chữ*/
+    position: relative;  
+    top: 1px;
+    /**************************/
+}
+
+/*Danh sách select trong select input*/
+.select-input__list {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 25px;
+    border-radius: 2px;
+    background-color: var(--white-color);
+    padding: 10px 16px;    
+    list-style: none;
+    display: none;
+    z-index: 1;
+}
+
+.select-input__link {
+    font-size: 1.4rem;
+    text-decoration: none;
+    color: var(--text-color);
+    display: block;
+    padding: 5px 0;
+
+}
+
+.select-input__link:hover {
+    color:var(--primary-color);
+}
+
+/**========================================== Pagination style ======================================*/
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+}
+
+.pagination-item {
+    margin: 0 12px;
+}
+
+.pagination-item--active .pagination-item__link{
+    background-color: var(--primary-color);
+    color: var(--white-color); 
+}
+
+
+.pagination-item__link {
+    --height: 30px;
+    display: block;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: 300;
+    color: #939393;
+    min-width: 40px;
+    height: var(--height);
+    text-align: center;
+    line-height: var(--height);
+}
+
+.pagination-item--active .pagination-item__link:hover {
+    background-color: #ed5c3f;
+}
+
+.pagination-item__icon {
+
+} 
+
+
+
+

@@ -1,0 +1,1842 @@
+.main {
+    /* Trên mobile sẽ gặp một lỗi đó là sẽ có một khoảng trắng nhỏ bên trái toàn bộ website và một thanh scroll 
+    ngang nhỏ xuất hiện vì các đối tượng bên trong class chứa toàn bộ website là class main bị "chọc" ra ngoài 
+    do kích thước màn hình bị nhỏ lại, do đó sẽ tạo nên một khoảng trắng nhỏ bên trái website  */
+    overflow: hidden;
+}
+
+/*Các thẻ div nằm bên trong header đều có tính chất block, tính chất block giúp ta set được weight và height cho 
+các thẻ mang tính chất block, những thẻ có tính chất block sẽ kế thừa (nhận được) chiều ngang của thẻ chứa nó*/
+.header {
+    /*Thẻ header là một thẻ có tính chất block, ta chỉ cần set height mà không cần set width cho thẻ này là vì
+    thẻ này nằm trong thẻ body, mà thẻ body lại nằm trong thẻ html, thẻ html kế thừa lại width của trình duyệt
+     => Thẻ header kế thừa width của trình duyệt nên không cần set width cho thẻ này nữa*/
+    height: var(--header-height); /*Chiều cao header*/
+    background-image: linear-gradient(0,#fb5d32,#f6422e); /*Màu background header*/
+    position: fixed;
+    top: 0;
+    bottom: 0; 
+    right: 0;
+    left: 0;
+}
+
+/*
+    Làm cho các thẻ ul và các thẻ li đều nằm trên một hàng:
+    - Mặc định là các thẻ li trong ul sẽ có display: list-item, list-item cũng khá giống với block, đều có tính 
+    chất là sẽ kế thừa lại chiều ngang của thẻ chứa nó, trong trường hợp này thẻ chứa các thẻ li là thẻ ul, mà 
+    do thẻ ul nằm trong header, nên nó kế thừa chiều ngang của trình duyệt
+    
+        => Các thẻ li cũng có chiều ngang = chiều ngang trình duyệt => Mỗi li nằm một dòng
+        => Một đặc biệt nữa của thẻ có tính chất block hay list-item là sẽ không nằm trên một hàng, do đó muốn 
+        các block hay list-item nằm trên cùng một hàng, ta dùng tính chất inline-block 
+        => Áp dụng display:inline-block vào các thẻ li (header__navbar-item)
+    
+    - Thẻ ul mặc định cũng có tính chất list-item, về bản chất ta có thể làm tương tự như vậy với các thẻ ul 
+    để đưa các ul lên cùng một hàng, nhưng Inline-block giúp các block hay các list-item nằm trên cùng 1 dòng 
+    đấy, nhưng vấn đề là lúc này các block hay các list-item sẽ dính sát với nhau mặc dù đã nằm trên cùng một dòng, 
+    thật ra để giải quyết vấn đề ta có thể căn margin, padding cho các thẻ ul để các thẻ ul tách nhau ra tương tự
+    như với các thẻ li, nhưng khoảng cách giữa các thẻ li là nhỏ nên ta có thể dễ dàng margin hay padding được,
+    còn các thẻ ul cần cách nhau một khoảng rất xa, ta làm như vậy sẽ không hay, do đó để thuận lợi cho việc tách
+    các thẻ ul ta sẽ dùng flex
+    
+        => Kkhông dùng Inline-block mà sẽ dùng flex
+        => Áp dụng các tính chất flex vào các thẻ ul (header__navbar-list)
+        => Để áp dụng các tính chất flex vào thẻ ul, ta sẽ display:flex vào thẻ chứa nó là thẻ div header_navber
+*/
+
+.header__navbar {
+    /*Khi display flex vào thẻ div header_navbar thì các thẻ con của nó là các thẻ ul .header__navbar-item sẽ là 
+    các flex item , do đó muốn các tính chất của flex box có tác dụng lên các flex item ta sẽ CSS các 
+    thuộc tính flex vào thẻ chứa các flex item là thẻ div header_navber */
+    display: flex;
+    
+    justify-content: space-between; /*làm các flex item (các thẻ ul) "văng" ra xa*/
+    /* margin: 0 150px; */
+}
+
+.header__navbar-list {
+    list-style: none; /*làm mất dấu chấm trước các item của thẻ li*/
+    
+    /*Mặc định của của thẻ ul sẽ có padding-left = 40px do đó ta reset lại padding-left*/
+    padding-left:0;
+    margin: 4px 0 0; /*Bỏ đi phần margin-bottom mặc định của thẻ ul*/
+}
+
+/*Tạo khoảng cách giữa các navbar-item*/ 
+.header__navbar-item {
+    display: inline-block;
+    margin: 0 8px; /*Tạo khoảng cách giữa các navbar-item*/ 
+    /*Để tạo dấu gạch đứng giữa các navbar-item ta phải dùng một pseudo class, để dùng
+    pseudo class xuất hiện đè lên các navbar item thì psuedo class phải có position:relative và thẻ chứa psuedo 
+    class phải có position:absolute */
+    position: relative;
+    min-height: 26px;
+}
+
+/*CSS cho các thẻ chứa chữ của các nav*/
+.header__navbar-item, 
+.header__navbar-item-link{
+    font-size: 1.3rem; /*Kích cỡ chữ*/
+    color: var(--white-color); /*Màu chữ*/
+    text-decoration: none; /*Bỏ dấu gạch chân chữ*/
+    font-weight: 400; /*Độ đậm của chữ*/
+}
+
+/*Để căn giữa icon so với navbar-item thì ta cần căn giữa thẻ a so với thẻ li, và căn giữa thẻ i so với thẻ a,
+có thể coi thẻ a (header__navbar-icon-link) là một flex item của thẻ li (header__navbar-item), và thẻ i 
+(header_navbar-icon) là flex-item so với thẻ thẻ a (header__navbar-item-link), vậy chỉ cần đặt thuộc tính flex
+vào các thẻ chứa là xong, lưu ý là để inline-flex chứ ko để flex để tránh cho các thể chứa bị "văng" xuống dòng
+*/
+.header__navbar-item, 
+.header__navbar-item-link {
+    display: inline-flex;
+    align-items: center;
+}
+
+/*làm hiệu úng hover cho các navbar-item, mà trong navbar-item có cả các thẻ a nữa nên ta phải hover luôn cho các thẻ a*/
+.header__navbar-item:hover, 
+.header__navbar-icon-link:hover, /*Thêm class của icon vào để khi hover vào icon cũng có hiệu ứng giống hover vào navbar-item*/
+.header__navbar-item-link:hover {
+    color:rgba(255, 255, 255, 0.7); /*Màu khi hover vào*/
+    cursor: pointer;
+}
+
+/*làm đậm chữ đăng ký, đăng nhập*/
+.header__navbar-item--strong {
+    font-weight: 400;
+}
+
+
+.header__navbar-item-language{
+    position: relative; /*set vị trí relative để language-list nằm đè lên header__navbar-item-language được  */   
+}
+
+/**================================== Dấu gạch đứng =================================================*/
+.header__navbar-item--separate::after {
+    /*Những thuộc tính cần có của một psuedo class: */
+        content: "";
+        display: block;
+        position: absolute;
+    /*============================*/
+    
+        border-left: 2px solid #fb9086; /*làm đậm dấu gạch đứng và chọn màu*/
+        height: 16px; /*Chiều của cao của dấu gạch đứng*/
+        
+        /*Khoảng cách giữa 2 navbar-item = 16px (vì mỗi navbar-item có margin: 0 8px) do đó, dấu gạch đứng muốn 
+        nằm giữa theo chiều ngang phải căn về phải khoảng -9px so với navbar-item */
+        right: -9px; 
+        
+        /*Để căn dấu gạch đứng nằm giữa theo chiều cao của navbar-item thì để top = 50%, lúc này dấu gạch ngang sẽ
+        bằng 50% chiều cao thẻ li hay navbar-item*/
+        top: 50%;
+    
+        /*Để căn dấu gạch đứng của thẻ li theo chiều dọc ta sẽ dịch thẻ li lên lại 50% so với chiều của chính nó thì 
+        nó sẽ nằm giữa*/
+        transform: translateY(-50%);
+    }
+    
+/**================================== Hover phần language =================================================*/
+.language-list{
+    /*language-list là một thẻ ul nằm trong li, các thành phần trong li đã được set thành inline-block, nhưng 
+    language-list thì vẫn mang tính chất block, do đó ta phải display:inline-block cho thẻ này*/
+    display: inline-block;
+    position: absolute; /*nằm đè lên header__navbar-item-language */
+    list-style: none; /*Bỏ dấu chấm của các li*/
+    background-color: var(--white-color); /*Màu của list */
+    min-width: 190px; /*Kích thước tối thiểu của list*/
+    top: 100%; /*Vị trí của list được đẩy lên = 100% so với thẻ chứa nó (header__navbar-item-language)*/
+    right: 0; /*Vị trí của list được đẩy sang phải = 0 so với thẻ chứa nó (header__navbar-item-language)*/
+    padding: 0 10px; /*Padding phải trái của li trong list*/
+    margin-top: 6px; /*Margin-top của list so với thẻ chứa nó*/
+    border-radius: 2px; /*Độ cong border của list*/
+   
+    /*========================== Flex cho con ============================ */
+    display: flex; /*Áp dụng các thuộc tính flex lên các flex item là các thẻ li bên trong list*/
+    flex-direction: column; /*Các thẻ flex item sẽ được flex theo column*/
+    transform-origin: 90% top; /*Tâm chuyển động growth ra*/
+    animation: animationGrowth ease-in 0.2s ; /*set keyframe animation, kiểu animation, thời gian*/
+    display: none;
+    will-change: opacity, transform; /*Thêm cái này để trình duyệt tối ưu cho hiệu ứng keyframe*/
+    z-index: 1;
+}
+
+.language {
+    line-height: 36px; /*set chiều cao cho thẻ li bên trong list*/
+    color: #000; /*Màu chữ của thẻ li*/
+}
+
+/*CSS cho chữ của thẻ li bên trong list*/
+.header__navbar-language-link {
+    font-size: 1.4rem; /*Kích cỡ chữ*/
+    color: var(--black-color); /*Màu chữ*/
+    text-decoration: none; /*Bỏ dấu gạch chân chữ*/
+    font-weight: 400; /*Độ đậm của chữ*/
+}
+
+/*Tạo hover khi hover vào các li trong list*/
+.header__navbar-language-link:hover { 
+    color: #f16b51; /*Màu chữ khi hover*/
+}
+
+/*Tạo cầu vô hình để tăng phạm vi hover*/
+.language-list::after { 
+/*============================ */
+    content: "";
+    display: block; 
+/*============================*/
+    position: absolute;
+    left:0;
+    top: -16px;
+    width: 100%;
+    height: 20px;
+    /* background-color: black; */
+}
+
+/*Tạo mũi tên từ list lên trên navbar-item*/
+.language-list::before {
+
+/*Những thuộc tính cần có của một psuedo class: */
+    content: "";
+    position: absolute;
+/*============================*/
+    border-width: 24px 30px;
+    top: -33.5px;
+    right: 34px;
+    border-style: solid;
+    border-color: transparent transparent var(--white-color) transparent;
+}
+
+/*Khi hover vào header__navbar-item-language thì display:flex cho language-list */
+.header__navbar-item-language:hover .language-list{
+    display: flex;
+    font-weight: 400;
+}
+
+/**===================================== CSS cho icon =================================================*/
+
+.header__navbar-icon-link{
+    color: var(--white-color); /*Màu icon*/
+    text-decoration: none; /*Bỏ gạch chân icon*/
+}
+
+.header__navbar-icon-link:nth-child(2){ /*Tạo khoảng cách giữa icon thứ nhất so với chữ "kết nối", dùng
+     nth-child() và truyền vào số thứ tự của element con để select được element con đó*/
+    margin-left: 3px;
+}
+
+.header__navbar-icon{
+    font-size: 1.8rem; /*Kích cỡ icon*/
+    margin: 0 7px; /*Khoảng cách giữa các icon*/
+}
+
+/*CSS cho riêng navbar "Kết nối" không ấn vào được*/
+.header__navbar-title--no-pointer{
+    cursor: text; /*Khi hover vào sẽ không còn pointer nữa*/
+    color: var(--white-color); /*Chữ không còn mờ nữa mà bằng màu --text-color, thuộc tính này sẽ ghi đề lên 
+    thuộc tính hover*/
+}
+/***************************************************************************************************************/
+
+/**===================================== Header qrcode =================================================*/
+
+.header_qr {
+    width: 186px; /*Chiều ngang của qr*/
+    background: var(--white-color);
+    display: flex; /*flex cho con của khu vực qr code này bao gồm qrcode img và các img apps */
+    flex-direction: column; /*flex cho con của khu vực qrcode này theo hướng cột*/
+    position: absolute; /*nằm đè lên header__navbar-item */
+    left: 0; /*Khoảng cách left của qr cách header__navbar-item một khoảng = 0 so với header__navbar-item */
+    top: 100%; /*Khoảng cách top của qr cách header__navbar-item = 100% chiều cao của header__navbar-item */
+    padding: 8px; /*làm dày khu vực chứa qr lên */
+    border-radius: 2px; /*bo góc qr*/
+    display: none;
+    animation: fadeIn ease-in 0.3s; /*hiệu ứng: keyframe, kiểu hiệu ứng, thời gian*/
+    z-index: 1;
+}
+
+/*Tạo cầu vô hình để tăng phạm vi hover khi đẩy header_qr xuống */
+.header_qr::before { 
+    position: absolute;
+    left:0;
+    top: -16px;
+    width: 100%;
+    height: 20px;
+    content:"";
+    display: block;
+}
+
+/*Khi hover vào Tải ứng dụng mới xuất hiện qr*/
+.header__navbar-item--has-qr:hover .header_qr{
+    display: block;
+    margin-top: 14px;
+    cursor: default;
+}
+
+.header__qr-img {
+    width: 100%; /*Chiều ngang của qr-img bằng chiều ngang của thẻ chứa nó là header-qr*/
+}
+
+.header__qr-apps {
+    display: flex; /*flex cho các icon trong thẻ app lên cùng 1 hàng */
+    flex-wrap: wrap; /*flex cho các apps-img xuống hàng nếu quá độ rộng của thẻ chứa nó*/
+    justify-content: space-between;
+    margin: 10px 10px;
+}
+
+/*hover vào các apps-img thì sẽ hiện con trỏ là default*/
+.header__qr-link {
+    cursor: default;
+}
+
+.header__qr-download-img {
+    height: 16px; /*Set chiều cao cho các ảnh*/
+}
+
+/**===================================== Notification =================================================*/
+.header__notify {
+    position: absolute; /*Nằm đè lên header__navbar-item*/
+    top: 150%; /*Cách header__navbar-item 150% chiều cao của header__navbar-item*/
+    right: 0; /*Cách về bên phải header__navbar-item = 0*/
+    width: 400px; /*Chiều ngang của phần notification*/
+    background-color: var(--white-color); /*Màu background*/
+    border: 1px solid rgba(0,0,0,0.1); /*Boder: độ dày, kiểu border, màu border*/
+    transform-origin: 90% top; /*Tâm chuyển động growth ra*/
+    animation: animationGrowth ease-in 0.2s ; /*hiệu ứng: keyframe, kiểu hiệu ứng, thời gian*/
+    border-radius: 2px;
+    display: none;
+    will-change: opacity, transform; /*Thêm cái này để trình duyệt tối ưu cho hiệu ứng keyframe*/
+    z-index: 1;
+}
+
+.header__notify::before {
+    content: "";
+    position: absolute;
+    top: -27px;
+    right: 1px;
+    border-width: 20px 30px;
+    border-style: solid;
+    border-color: transparent transparent var(--white-color) transparent;
+}
+
+/*Tạo cầu vô hình để tăng phạm vi hover */
+.header__notify::after { 
+    position: absolute;
+    left:0;
+    top: -16px;
+    width: 100%;
+    height: 20px;
+    content:"";
+    display: block;
+    /* background-color: black; */
+}
+
+.header__navbar-item--has-notify:hover .header__notify {
+    display: block;
+}
+
+.header__notify-header {
+    height: 40px; /*Chiều cao*/
+    background-color: var(--white-color); /*Màu background phần noti header*/
+    margin-left: 12px;
+    cursor: text;
+}
+
+/*CSS chữ phần noti header thẻ h3*/
+.header__notify-header h3 {
+    color: #999; /*Màu chữ*/
+    margin: 0; /*Mặc định thẻ h3 có margin lên top và botoom nên reset về 0*/
+    font-weight: 400; /*độ đậm chữ*/
+    font-size: 1.4rem; /*font chữ*/
+    line-height: 40px; /*Để phần chữ nằm giữa phần noti header thì ta cho line-height (phần bao ngoài chữ) = chiều cao header là được*/ 
+}
+
+.header__notify-list {
+    padding-left: 0; /*Mặc định thẻ ul có padding-left nên reset padding-left = 0*/
+}
+
+/*Note: Padding vào thẻ a trong thẻ li, chứ không padding vào thẻ li, vì padding vào thẻ a để tăng phạm vi ấn nút 
+của thẻ a, chứ padding vào thẻ li thì tăng phạm vi của li lên thôi, thẻ a vẫn nhỏ, phải ấn đúng vào thẻ li mới ăn*/
+
+.header__notify-item {
+
+}
+
+.header__notify-link {
+    display: flex;
+    padding: 12px; /*Tạo khoảng cách của content bên trong notify item (notify-img và notify-infor) */
+    text-decoration: none;
+}
+
+.header__notify-img {
+    width: 48px; /*Chiều ngang của ảnh*/
+    /*Khi đã set chiều ngang của ảnh rồi những chiều cao của ảnh chưa được set, do đó lúc này chiều cao của ảnh
+    sẽ theo chiều cao của thẻ a dẫn đến méo ảnh, do đó thuộc tính object-fit: contain sẽ fit được vấn đề này, nó  
+    sẽ chỉ định cách thay đổi kích thước ảnh sao cho phù hợp với vùng chứa nó.
+    Tính chất contain sẽ giúp khi thay đổi kích thước sẽ vẫn giữ nguyên tỉ lệ khung hình để vừa với vùng chứa nó  
+    */
+    object-fit: contain; 
+}
+
+.header__notify-infor {
+    margin: 0 12px; /*Tạo khoảng cách giữa ảnh và notify-img và notify-infor*/
+    display: flex; /*Flex cho notify-name và notify-description*/
+    flex-direction: column;
+    gap: 10px; /*Khoảng cách giữa các flex item*/
+}
+
+
+/*Thẻ span mặc định không có tính chất block nên các thẻ span sẽ nằm trên cùng một dòng, bây giờ muốn nó không nằm 
+trên cùng một dòng thì set tính chất block cho các thẻ span*/
+.header__notify-name {
+    display: block;
+    font-size: 14px; /*Kích thước chữ*/
+    color: var(--black-color); /*Màu chữ*/
+    font-weight: 400;
+}
+
+.header__notify-description {
+    display: block;
+    font-size: 12px; /*Kích thước chữ*/
+    color: #756F6E; /*Màu chữ*/
+}
+
+.navbar-item--has-notify:hover .noti {
+    display: block;
+}
+
+@keyframes animationGrowth {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.header__notify-item:hover {
+    background-color: #f7f7f7;
+}
+
+.header__notify-item--seen {
+    background-color: rgba(238, 75, 43,0.09);
+}
+
+.header__notify-footer-btn {
+    color:var(--black-color);
+    text-decoration: none;
+    display: flex; /*Flex cho con của nó là chữ "Xem tất cả"*/
+    justify-content: center;
+    padding: 12px 16px; /*Phạm vi của phần notify-foorter*/
+    background-color: #f7f7f7;
+    font-weight: 400;
+}
+
+/**===================================== Modal =================================================*/
+.modal {
+    position: fixed; /*Set position cho modal để modal__overlay có thể nằm đề lên trên modal (modal 
+    có thể hiểu như là toàn bộ website và modal__overlay nằm đề lên đó)*/
+    
+    /*Set vị trí cho modal chiếm hết toàn bộ website để modal__overlay có thể nằm đề lên được toàn 
+    bộ webstie*/
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;    
+    /*============================================================================================*/
+
+    display: flex; /*flex cho con của modal để có thể kiểm soát vị trị của các con của modal bao gồm
+    modal__overlay, modal__body*/
+    /* Flex cho con */
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn linear 0.1s; /*Hiệu ứng xuất hiện ra của modal*/
+    display: none;
+    z-index: 1;
+}
+
+.modal.open {
+    display: flex;
+}
+
+.auth-form.sigup-form.open {
+    display: block;
+}
+
+.auth-form.login-form.open {
+    display: block;
+}
+
+.modal__overlay {
+    position: absolute; /*modal__overlay nằm đè lên modal*/
+    /* mục đích của overlay là bao phủ hết toàn bộ website và làm background cho modal nên set chiều 
+    ngang và chiều cao của modal__overlay bằng modal cũng như là bằng toàn bộ webstie*/
+    width: 100%; /*Chiều ngang của modal__overlay bằng 100% chiều ngang của modal*/
+    height: 100%; /*Chiều cao của modal__overlay bằng 100% chiều cao của modal*/
+    background-color: rgba(0, 0, 0, 0.4); /*Màu cho overlay*/
+}
+
+.modal__body {
+    /*Cập nhật biến cho keyframe growth*/
+    --grow-from: 0.7;
+    --grow-to: 1;
+    /*========================*/
+    z-index: 10; /*làm cho modal__body nổi lên trên modal__overlay, vì modal__overlay đang nằm ở
+    layer cao hơn bình thường do tính chất của thuộc tính position, để làm được điều này có thể
+    dùng position:relative, nhưng nên dùng z-index để dễ dàng di chuyển layer dù cho thẻ có được khai 
+    báo trước hay sau đi chăng nữa thì khi có z-index cao hơn vẫn sẽ nằm ở layer cao hơn */
+    animation: growth linear 0.1s; /*hiệu ứng xuất hiện của modal__body*/
+}
+
+.auth-form {
+    width: 500px; /*Chiều ngang của cả auth-form*/
+    border-radius: 5px; /*Bo góc*/
+    background-color: var(--white-color);  /*Màu auth-form*/
+    /*Đã bo góc cho auth-form nhưng con của auth-form là auth-form socials không có bo góc và nó sẽ 
+    "chọc" ra ngoài do auth-form social đang vượt quá auth-form, do đó thêm thuộc tính overflow:hidden 
+    để khi có hiện tượng con của một class vượt quá class đó thì nó sẽ bị ẩn đi*/
+    overflow: hidden; 
+    background-color: var(--white-color);/*Màu của auth-form*/
+    border-radius: 5px; /*Bo góc auth-form*/
+    display: none;
+}
+
+/*auth-form nên được tách ra thành 2 phần là auth-form__container và auth-form__socials vì padding của 
+2 phần này là khác nhau*/
+
+.auth-form__container {
+    padding: 0 32px; /*Set padding cho phần auth-form__container*/
+}
+
+
+
+.auth-form__header {
+    display: flex; /*flex lên con của class này là Đăng ký và đăng nhập*/
+    align-items: center; /*cho các flex item nằm trên cùng một trục ngang*/
+    justify-content: space-between; /*flex item xa nhau ra*/
+    padding: 0 12px; /*padding cho phần header*/
+    margin-top: 10px; /*tạo khoảng cách giữa phần header lên phía trên*/
+}
+
+.auth-form__heading {
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: var(--text-color);
+}
+
+.auth-form__switch-btn {
+    font-size: 1.6rem;
+    color: var(--primary-color);
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.auth-form__input {
+    width: 100%; /*chiều ngang = 100% chiều ngang của cả auth-form*/
+    height: 40px;  /*chiều cao*/
+    margin-top: 16px; /*Khoảng cách giữa các thẻ input cách các phần auth-form__header*/
+    padding: 0 12px; /*padding chữ trong thẻ input*/
+    font-size: 1.4rem; /*độ lớn chữ*/
+    border: 1px solid var(--border-coler); /*boder của input*/
+    border-radius: 2px;/*bo góc*/
+    outline: none; /*Bỏ outline của input*/
+}
+
+/*Khi nháy vào input thì boder đổi màu, để làm được việc đó thì dùng psuedo class focus*/
+.auth-form__input:focus {
+    border-color: #888;
+}
+
+/*Phần bên dưới các thẻ input*/
+.auth-form__aside {
+    margin-top: 18px;/*Khoảng cách giữa phần chữ so với phần các thẻ input*/
+}
+
+.auth-form__policy-text {
+    font-size: 1.2rem;
+    line-height: 1.6rem; /*Giảm chiều cao của 1 dòng chữ xuống để 2 dòng cách nhau gần hơn     */
+    text-align: center; /*Căn giữa các dòng chữ*/
+    padding: 0 12px; /*Padding các dòng chữ vào*/
+}
+
+.auth-form__text-link {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+/*auth-form__socials gồm 2 nút*/
+.auth-form__controls {
+    display: flex;/*flex lên 2 nút*/
+    justify-content: flex-end; /*Đẩy 2 nút theo hướng flex-end*/
+    margin-top: 80px;/*Khoảng cách giữa các nút với phần chữ bên trên*/
+}
+
+.auth-form__controls-back {
+    margin-right: 8px; /*Tạo khoảng cách giữa nút back và nút register*/
+}
+
+/*auth-form__socials gồm 2 nút: Kết nối với Facebook và Kết nối với Google*/
+.auth-form__socials {
+    background-color: #f5f5f5; /*Màu background của phần socials*/
+    display: flex; /*flex lên 2 nút*/
+    justify-content: space-between; /*Đẩy 2 nút ra 2 đầu*/
+    padding: 16px 36px;/*Tạo độ dày cho phần socials*/
+    margin-top: 22px; /*Tạo khoảng cách giữa phần socials và phần controls  */
+}
+
+.auth-form__socials-icons {
+    font-size: 1.8rem; /*Kích thước icon*/ 
+}
+
+.auth-form__socials--fb {   
+    color:var(--white-color); /*Màu chữ của phần FB*/
+    background-color: #3a5a98; /*Màu background của phần FB*/
+}
+
+.auth-form__socials--gg {   
+    color: #666; /*Màu chữ của phần GG*/
+    background-color: var(--white-color); /*Màu background của phần GG*/
+}
+
+.auth-form__socials--fb {   
+    color:var(--white-color); /*Màu chữ của phần FB và  */
+
+}
+
+.auth-form__socials-lable {
+    margin: 0 28px; /*Tạo khoảng cách giữa icon và chữ*/
+}
+
+/*.auth-form__help gồm "Cần trợ giúp?" và "Quên mật khẩu"*/
+.auth-form__help {
+    display: flex; /*flex cho "Cần trợ giúp?" và "Quên mật khẩu"*/
+    justify-content: flex-end;/*Đẩy về hướng flex-end*/
+}
+
+.auth-form__help-link {
+    text-decoration: none; /*Bỏ gạch chân chữ*/
+    font-size: 1.4rem; 
+    color: #939393; /*Màu chữ "Cần trợ giúp"*/
+}
+
+.auth-form__help-separate {
+    display: block;
+    border-left: 1px solid #eaeaea;
+    height: 22px; /*Chiều cao dấu gạch đứng*/
+    margin: -3px 16px 0; /*Tạo khoảng cách giữa dấu gạch đứng với 2 chữ*/
+}
+
+.auth-form__help-forgot {
+    color: var(--primary-color); /*Overwrite màu chữ "Quên mật khẩu" */
+}
+
+/**===================================== Header with Search =================================================*/
+.header-with-search{
+    /*Chiều của phần header-with-search sẽ = chiều cao của phần header - 
+    chiều cao của phần navbar*/
+    height:var(--search-part-height); 
+    display: flex; /*Flex cho logo và các thành phần bên trong header with search*/
+    align-items:center; /*Căn giữa các thành phần bên trong header with search*/
+    align-items: center;
+    margin: 0 8px; /*Dịch khối header with search vào cho bằng phần navbar*/
+}
+
+.header__mobile-search {
+    padding: 0  12px;
+    display: none;
+}
+
+.header__mobile-search-icon {
+    font-size: 2.6rem;;
+    color: var(--white-color);
+    display: none;
+    padding-left: 10px;
+}
+
+label[for="mobile-search-checkbox"] {
+    display: none;
+}
+
+.header__logo {
+    height:var(--search-part-height); 
+ 
+    width: 200px; /*Chiều ngang của phần chứa logo*/
+}
+
+.header__logo-link {
+    color:transparent;
+    text-decoration: none;
+}
+
+.header__search-checkbox:checked ~ .header__search {
+    display: flex;
+} 
+
+.header__logo-img {
+    width: 150px; /*Chiều ngang của logo*/
+    color: #fff; /*Màu của logo*/
+    height: 45px; 
+    height:var(--search-part-height); 
+    text-align: center;
+
+}
+
+.header__search
+ {
+    /*Phần logo và phần cart có chiều ngang cố định, phần search sẽ nhận phần chiều ngang còn lại, để làm như
+    vậy thì set flex:1, do đó chỉ cần set chiều cao mà không cần set chiều ngang*/
+    flex: 1; /*flex row*/
+    height: 40px; /*Chiều cao của khung search*/
+    background-color: var(--white-color);
+    border-radius: 2px;
+    display: flex; /*flex cho các thành phần bên trong header__search*/
+    align-items: center; /*căn giữa các thành phần bên trong header__search*/
+}
+
+.header__cart {
+    position: relative;
+    width: 150px; /*Chiều ngang của phần chứ cart*/
+    text-align: center; /*Căn giữa cart*/
+    /* position: relative; */
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+.header__search-input-wrap {
+    flex: 1;
+    height: 100%;
+    position: relative;
+}
+
+.header__search-input {
+    /* Chiều cao và chiều ngang của input sẽ bằng luôn phần header__search */
+    /* flex: 1; */ /*header__search-input là con của header__search nên để flex 1 thì chiều ngang của input cũng sẽ = chiều ngang của header__search */
+    width: 100%;
+    height: 100%;
+    border: none; /*Bỏ border*/
+    outline: none; /*Bỏ outline*/
+    font-size: 1.4rem; /*Kích thước chữ bên trong input*/
+    color:var(--text-color); /*Màu chữ bên trong input*/
+    padding: 0 16px; /*Padding chữ bên trong input*/
+    /*Phần input là con của phần header__search nên là border vào phần header__search mà phần input không 
+    được border thì nó sẽ bị "chọc" ra ngoài, trong trường hợp ta set boder cho phần input thay vì overflow
+    vào header__search vì nếu làm vậy phần lịch sử tìm kiếm cũng là con của phần header__search sẽ bị tính
+    chất hidden tác động lên và không hiện ra  */
+    border-radius: 2px;
+}
+
+
+.header__search-input:focus ~ .header__search-history{
+    display: block;
+}
+
+.header__search-select {
+    border-left: 1px solid #ccc; /*Tạo dấu gạch đứng bằng cách tạo ra border-left*/
+    padding-left: 16px;
+    position: relative; 
+    cursor: pointer;
+}
+
+/*CSS chữ trong lable  */
+.header__search-select-lable {
+    font-size: 1.4rem; /*Kích cỡ chữ*/
+    color: var(--text-color); /*Màu chữ*/
+}
+
+/*CSS icon */
+.header__search-select-icon {
+    font-size: 1.4rem; /*Kích cỡ chữ*/
+    color: rgb(131, 131, 131); /*Màu chữ*/
+    margin: 0 16px 0 8px; /*Khoảng cách giữa icon với lable*/
+    /*Di chuyển icon mà không làm tác động đến những thành phần xung quanh*/
+    position: relative;
+    top: 1px; /*Dịch icon xuống cho ngang với lable*/
+}
+
+.header__search-btn{ 
+    background-color: var(--primary-color); /*Màu nút*/
+    border: none; /*Bỏ border*/
+    outline: none; /*Bỏ outline*/
+    height: 34px; /*Chiều cao nút*/
+    width: 60px;
+    border-radius: 2px;
+    margin-right: 3px;/*Khoảng cách của nút với phần bên phải*/
+}
+
+.header__search-btn:hover {
+    background-color: #fb6445; /*Màu khi hover*/
+    cursor: pointer;
+}
+
+
+
+.header__search-btn-icon{
+    font-size: 1.4rem; /*Chiều cao icon */
+    color:var(--white-color); /*Màu icon*/
+
+}
+
+.header__search-select:hover .header__search-option {
+    display: block;
+}
+
+.header__search-select::before { /*Tạo cầu vô hình để tăng phạm vi hover khi đẩy header_qr xuống*/
+    position: absolute;
+    left:0;
+    top: 16px;
+    width: 100%;
+    height: 20px;
+    content:"";
+    display: block;
+    /* background-color: black; */
+}
+
+.header__search-option {
+    position: absolute; /*làm cho phần header__search-option đề lên phần .header__search-select*/
+    /* right: 0;  */
+    /*vị trí nằm về bên phải so với */
+    left: 1px;
+    top: 130%; /*Cách header__search-select 140% chiều cao của header__search-option*/
+    width: 140px; /*Chiều ngang của list*/
+    list-style: none; /*Bỏ dấu chấm đầu dòng*/
+    box-shadow: 0 1px 2px #e0e0e0; /*làm shadow cho phần li*/
+    padding-left: 0; /*reset padding-left mặc định cua ul*/
+    border-radius: 2px; /*Bo cong*/
+    animation: fadein ease-in 0.2s; /*Hiệu ứng xuất hiện của list*/
+    display: none;
+    z-index: 1;
+}
+
+
+.header__search-option-item{
+    background-color: var(--white-color); /*Màu li*/
+    padding: 8px 8px; /*Padding cho li*/
+}
+
+.header__search-option-item:first-child {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+.header__search-option-item:last-child {
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.header__search-option-item:hover{
+    background-color: #fafafa;
+    cursor: pointer;
+}
+
+.header__search-option-item span {
+    font-size: 1.4rem;  /*Cỡ chữ bên trong li*/
+    color: var(--text-color);  /*Màu chữ bên trong li*/
+    margin-left: 8px; /*Đẩy chữ trong li sang trái một chút*/
+}
+
+.header__search-option-item i {
+    font-size: 1.2rem;  /*Cỡ icon bên trong li*/
+    color: var(--primary-color); /*Màu icon bên trong li*/
+    margin-left: 12px; /*Định vị icon*/
+    display: none;
+}
+
+.header__search-option-item--active i{
+    display: inline-block;
+}
+
+.search-container {
+    display: block;
+    /* height: ; */
+}
+
+.search-part {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:var(--search-part-height);  
+    padding: 25px 0 40px;
+}
+
+.search-area {
+    /* display: flex; */   
+     position: relative;
+}
+
+.search-input { 
+    padding-top:20px;
+    position: relative;
+}
+
+.search-input__search-box {
+    /* position: absolute; */
+    width: 840px;
+    height: 100%;
+    border-radius: 2px;
+    /* background-color:#ffffff;
+    box-shadow:#000000 0px 2px 4px 0px;
+    color:#000000; */
+    border: none;
+    outline: none;
+    font-size:1.4rem;
+    padding:15px;
+}
+
+.search-input__search-btn {
+    position: absolute;
+    display:flex;
+    background-color: #fb5533;
+    right: 3.5px;
+    bottom: 3px;
+    min-width: 66px;
+    height: 40.5px;
+}
+
+.search-input__search-btn-icon {
+    font-size: 1.4rem;
+    color: var(--white-color);
+}
+
+
+.header__cart-listed {
+    position: absolute;
+    min-width: 420px;
+    background-color: var(--white-color);
+    border-radius: 2px;
+    box-shadow: 0 1px 3.125rem 0 rgba(0, 0, 0, 0.2);
+    top: 140%;
+    right: 49px;
+    z-index: 1;
+    transform-origin: 90% top; /*Tâm chuyển động growth ra*/
+    animation: animationGrowth ease-in 0.2s ;
+    display: none;
+    will-change: opacity, transform; 
+    cursor: default;
+}
+
+.header_cart-icon {
+    color: var(--white-color); /*Màu của cart*/
+    font-size: 2.4rem; /*Kích thước của cart*/
+    margin-top: 6px; /*Dịch icon xuống 1 chút*/
+    margin-right:10px;
+}
+
+.header__cart-listed-no-cart-img {
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.header__cart-listed-no-cart-text {
+    font-size: 14px;
+
+}
+
+.header__cart::before { /*Tạo cầu vô hình để tăng phạm vi hover khi đẩy header_qr xuống*/
+    position: absolute;
+    left:0;
+    top: 100%;
+    width: 100%;
+    height: 20px;
+    content:"";
+    display: block;
+    cursor: pointer;
+    /* background-color: black; */
+}
+
+.header__cart-listed::after {
+    /*Những thuộc tính cần có của một psuedo class: */
+        content: "";
+        position: absolute;
+    /*============================*/
+        border-width: 24px 30px;
+        top: -33.5px;
+        right: -1px;
+        border-style: solid;
+        border-color: transparent transparent var(--white-color) transparent;
+        cursor: pointer;
+
+}
+
+
+.header__cart:hover .header__cart-listed {
+    display: block;
+}
+
+.cart-empty__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    display: none;
+}
+
+.header__cart-listed.header__cart-listed-no-cart .cart-empty__content{
+    display: flex;
+}
+
+.header__cart-notice {
+    position: absolute;
+    background-color: var(--white-color);
+    color: var(--primary-color);
+    border-radius: 10px;
+    border: 2px solid #EE4D2D;
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+    padding: 1px 7px;
+    top:-6px;
+    right:55px;
+}
+
+.category {
+    background-color: var(--white-color);
+}   
+
+.list-category {
+    display: flex;  
+}
+
+.item_category {
+    margin: 5px 14px 5px 0;
+    font-size: 12px;
+    color:#f5f5f5;
+}
+
+
+.history-search {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 3px);
+    width: calc(100% - 85px);
+    background-color: var(--white-color);
+    border-radius: 2px;
+    box-shadow: 0 1px 5px rgb(189, 189, 189);
+    display: none;
+    overflow: hidden;
+}
+
+/*Khi nháy vào search input thì , history-search hiện ra*/
+.search-input__search-box:focus ~ .history-search {
+    display: block;
+    /* margin-top: 14px;     */
+}
+
+.history-search::before { /*Tạo cầu vô hình để tăng phạm vi hover khi đẩy header_qr xuống*/
+    position: absolute;
+    left:0;
+    top: -16px;
+    width: 100%;
+    height: 20px;
+    content:"";
+    display: block;
+    /* background-color: black; */
+}
+
+.history-search-item__header {
+    margin: 10px 12px 5px;
+    font-size: 1.4rem;
+    color: #999;
+    font-weight: 400;
+}
+
+.history-search-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;   
+}
+
+.history-search-item {
+    display: flex;
+    height: 38px;
+    padding: 0 12px; 
+    align-items: center;
+    margin: 0;
+}
+
+.history-search-item:hover{
+    background-color: #fafafa;
+    cursor: pointer;
+}
+
+
+.history-search-item a{
+    text-decoration: none;
+    font-size: 1.4rem;
+    color: var(--text-color);
+}
+
+.header__search-history {
+    position: absolute;
+    background-color: var(--white-color);
+    top: 110%;
+    width: 100%;
+    box-shadow: 0 1px 5px #999;
+    border-radius: 2px;
+    overflow: hidden;
+    display: none;
+    z-index: 1;
+}
+
+.header__search-history-heading {
+    font-size: 14px;
+    color:rgba(0,0,0,0.26);
+    cursor: text;
+    padding: 10px 10px 0 10px;
+    margin: 0;
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+}
+
+.header__search-history-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+}
+
+.header__search-history-item {
+    padding: 10px;
+}
+
+.header__search-history-item:hover {
+    background-color: #fafafa;
+    cursor: pointer;
+}
+
+.header__search-history-item-link {
+    text-decoration: none;
+    font-size: 14px;
+    color: var(--black-color);
+    display: block;
+    /* padding-left: 10px; */
+}
+
+.header__sort-bar {
+    position: fixed;
+    top:var(--header-height);
+    left:0;
+    right:0;
+    height: var(--header-sort-bar-height);
+    background-color: var(--white-color);
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    display: none;
+}
+
+.header__sort-item {
+    float: 1;
+    width: 100%;
+
+}
+
+.header__sort-link {
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 1.4rem;
+    display: block;
+    line-height: var(--header-sort-bar-height);
+    position: relative;
+    text-align: center;
+}
+
+.header__sort-link::before {
+    content: "";
+    position: absolute;
+    border-left: 1px solid #e5e5e5;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 60%;
+}
+
+.header__sort-item--active .header__sort-link {
+    color: var(--primary-color);
+}
+
+.header__sort-item:first-child .header__sort-link::before {
+    display: none;
+}
+
+.header__cart-heading {
+    margin: 0;
+    padding:10px 0 10px 10px;
+    display: flex;
+    color: #ccc;
+    font-size: 14px;
+    cursor: text;
+    color: #B5B5B5;
+}
+
+.header__cart-list {
+    margin: 0;
+    padding:0;
+    /*Để chiều cao của phần list cart này ăn theo chiều cao của mà hình trình duyệt thì dùng đơn vị vh, 
+    không dùng đơn vị px*/
+    max-height: 56vh; /*Bằng 56% chiều cao trình duyệt Viewport*/
+    overflow-y: auto; /*Khi trong list này có nhiều element kích thước của tổng các element bên trong list cart
+    lơn hơn kích thước của list card (kích thước của element con lớn hơn kích thước của elemnt cha) thì nó
+    sẽ bị "chọc" ra ngoài, để khắc phục điều đó thì dùng thuộc tính này, khi có hiện tượng đó xảy ra thì sẽ 
+    xuất hiện thanh roll, nhưng ở đây chỉ muốn roll dọc thôi nên là để overflow-y*/
+}
+
+.header__cart-item {
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 10px; 
+    margin:0;
+}
+
+.header__cart-item:hover {
+    background-color: #f8f8f8;
+}
+
+.header__cart-item-img {
+    width: 48px; /*Chiều ngang của ảnh*/
+    /*Khi đã set chiều ngang của ảnh rồi những chiều cao của ảnh chưa được set, do đó lúc này chiều cao của ảnh
+    sẽ theo chiều cao của thẻ a dẫn đến méo ảnh, do đó thuộc tính object-fit: contain sẽ fit được vấn đề này, nó  
+    sẽ chỉ định cách thay đổi kích thước ảnh sao cho phù hợp với vùng chứa nó.
+    Tính chất contain sẽ giúp khi thay đổi kích thước sẽ vẫn giữ nguyên tỉ lệ khung hình để vừa với vùng chứa nó  
+    */
+    object-fit: contain; 
+    border: 1px solid #E8E8E8;
+}
+
+.header__cart-item-infor {
+    margin-left:10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.header__cart-item-head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header__cart-item-name {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    margin-right:10px;
+    line-height: 2rem;
+    max-height: 4rem; /*Khi tên dài quá tạo thành 2 dòng thì tổng chiều cao của 2 dòng này cũng chỉ là 4rem
+    tại sao phải để max-height mà không để height, vì khi tên ngắn chỉ có 1 dòng thì chiều cao của phần này 
+    vẫn chưa được 4rem, do đó để max-height giúp tên ngắn hay dài gì thì cũng tối đa 4rem mà thôi */
+    padding-right: 16px; /*Cách phần này ra với phần giá*/
+    flex: 1; /*flex:1 giúp cho flex item này chiếm hết khoảng không gian trống của thẻ chứa nó, khắc phục được 
+    hiện tượng căn ra giữa do display:flex gây ra*/
+    overflow: hidden; /*Ẩn chữ dài quá 2 dòng*/
+    display: -webkit-box; /*Chỉ chạy trên các browser có core là webkit*/ 
+    -webkit-box-orient: vertical; /*Hướng của các dòng chữ, nếu từ trên xuống dưới thì là vertical*/
+    -webkit-line-clamp: 2; /*Giúp giới hạn phần content của một khối theo số dòng được set và xuất hiện dấu 3
+    chấm tại dòng đó*/
+    text-align: left; /*Đẩy toàn bộ chữ sang bên trái, tránh hiện tượng căn giữa đối với một số tên ngắn*/
+}
+
+.header__cart-item-wrap {
+    font-size: 14px;
+    color:var(--primary-color);
+}
+
+.header__cart-item-body {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 2px;
+
+}
+
+.header__cart-item-description {
+    font-size: 10px;
+    font-size: 12px;
+}
+
+.header__cart-item-remove {
+    font-size: 15px;
+    
+}
+
+.header__cart-item-remove:hover {
+    color:var(--primary-color);
+}
+
+.cart-nonempty__content-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding:10px 10px 20px 0;
+    background-color: #FDFDFD;
+}
+
+.cart-nonempty__content-btn:hover {
+    background-color: #fb6445; /*Màu khi hover*/
+    cursor: pointer;
+}
+
+
+/*Để làm được phần "danh mục" và "sản phẩm" cần nắm được quy tắc 12 column grid, để chia ra được 12 column ta 
+chia theo %, tổng kích thước chiều ngang của 1 column = chiều ngang màn hình = 100% Để tính được kích thước 
+của 1 column là: 100%/12 = 8.3% (hoặc 8.3% * 2 = 16.6% trong trường hợp gộp 2 column thành 1) */
+
+.app__container {
+    background-color: #F5F5F5;
+}
+
+.app__contain {
+    margin-top: var(--header-height);
+    position: relative;
+    padding-top: 36px;
+    z-index: -1;
+}
+
+.category__heading {
+    color:rgba(0,0,0,.8);
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 1.3px;
+    /* border-bottom: 1px solid rgba(0,0,0,.05);; */
+    padding: 12px 16px 0;
+    margin:0;
+}
+
+.category__heading-icon {
+    font-size: 1.4rem;
+    margin-right: 4px;
+    position: relative;
+    top:-1px;
+}
+
+
+.category-list {
+    padding-left: 0px;
+    padding-bottom: 8px;
+    /* margin-left: 10px; */
+}
+
+.category-item {
+    width: 100%;
+    list-style: none;
+    position: relative;    
+}
+
+.category-item:first-child::before {
+    display: none;
+}
+
+.category-item::before {
+    content: "";
+    border-top: 1px solid #E1E1E1;
+    list-style: none;
+    position: absolute;
+    top:0;
+    left:20px;
+    right:20px;     
+}
+
+.category-item--acitve .category-item__link {
+    color:var(--primary-color);
+}
+
+.category-item--acitve .category-item__link::before {
+    content: "";
+    top: 50%;
+    transform: translateY(calc(-50% - 1px));
+    left: 7px;
+    position: absolute;
+    border: 4px solid;
+    border-color: transparent transparent transparent var(--primary-color);
+}
+
+.category-item__link {
+    position: relative;
+    right:0;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: rgb(51, 51, 51);
+    padding:8px 20px;
+    display: block;
+    transition: right linear 0.1s; /*Định nghĩa chuyển động của element khi hover vào
+    transition: hướng di chuyển, kiểu di chuyển, thời gian.
+    ở đây có thể hiểu là lúc đầu right = 0, sau khi hover, right = -4px */
+}
+
+.category-item__link:hover {
+    right: -4px; /*Chuyển động sau khi hover*/
+    color:var(--primary-color);
+}
+
+.mobile-category {
+    display: none;
+}
+
+.mobile-category__list {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+
+
+    /*Khi có nhiều thẻ li trong thẻ ul và thẻ ul đang có display:flex, các thẻ li sẽ dàng hàng 
+    ngang tràn ra vùng màn hình không quan sát được nên ta sẽ không thể quan sát được hết thẻ các thẻ li
+    Để có thể thấy được các thể li ở phần màn hình không thể quan sát được ta cần một thanh scroll để kéo sang
+    mà xem, để làm được điều đó, ta có 2 việc cần làm:
+        1. Set chiều ngang tối đa cho thẻ ul 
+        2. Khi các thẻ li vượt ra khỏi chiều dài tối đa của thẻ ul thì dùng thuộc tính overflow:auto để xuất 
+        hiện thanh kéo, với overflow-x để kéo sang trái.
+    
+    */
+    max-width: 100%; /*Set chiều ngang tối đa cho thẻ ul */
+    overflow-x: scroll; /*Khi thẻ con vượt quá thẻ cha theo chiều ngang thì sẽ tự tạo ra thanh scroll để
+    kéo sang trái */
+
+}
+
+/* Psuedo class -webkit-scrollbar giúp ẩn thanh scroll*/
+.mobile-category__list::-webkit-scrollbar {
+    display: none;
+}
+
+.mobile-category__item {
+    flex-shrink: 0; /* Khi các flex-item đang nằm chung một thẻ cha mà thẻ cha bị giới hạn kích thước nên nội 
+    dung bên trong các flex item sẽ bị co lại, thuộc tính này sẽ làm cho các nội dung bên trong flex-item không 
+    co lại nữa */
+    margin-right: 10px;
+}
+
+/* Selector theo thứ thứ tự các thẻ con */
+.mobile-category__item:nth-of-type(3n + 1) .mobile-category__link {
+    /* 3n có nghĩa là trong 3 element thì bắt đầu từ element thứ 3, 3n + 1 có nghĩa là bắt đầu từ element thứ
+    3 và quay lại element đầu tiên, tương tự cho 3n + 2, 3n + 3*/
+    background-color: #87AFD8;
+}
+
+.mobile-category__item:nth-of-type(3n + 2) .mobile-category__link {
+    background-color: #76C98D ;
+}
+
+.mobile-category__item:nth-of-type(3n + 3) .mobile-category__link {
+    background-color: #88CF81;
+}
+
+.mobile-category__link {
+    --line-height: 2rem;
+    text-decoration: none;
+    color: var(--white-color);
+    font-size: 1.4rem;
+    line-height: var(--line-height);
+    text-align: center;
+    width: 110px;
+    height: calc(var(--line-height) * 2);  /*Chiều cao một khối chứa chữ sẽ gồm 2 dòng, gấp đôi line-height*/
+    overflow: hidden;
+    display: block;  /*Set tính chất khối cho thẻ a để có thể set được width và height*/
+    border-radius: 4px;
+    padding: 0 2px;
+    font-weight: 300;
+
+    /* làm cho xuất hiện dấu 3 chấm khi nội dung vượt quá thẻ li */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+
+    -webkit-tap-highlight-color: transparent; /*làm trong suốt hight-light khi ấn vào nút */
+}
+
+
+.home-filter {
+    background-color: rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    padding: 12px 22px;
+    border-radius: 2px;
+}
+
+.home-filter__lable {
+    font-size: 1.4rem;
+    color:#555;
+    margin-right: 16px;
+}
+
+.home-filter__btn {
+    margin-right: 12px;
+    min-width: 90px; /*Nút mặc định có min-width: 124px do đó nút sẽ dài hơn 
+    giờ set lại min-width để những nút này ngắn lại*/
+}
+
+.home-filter__page {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.home-filter__page-num {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-right: 22px;
+}
+
+.home-filter__page-current {
+    color: var(--primary-color);
+}
+
+.home-filter__page-control {
+    border-radius: 2px;
+    overflow: hidden;
+    display: flex;
+    width: 72px;
+    height: 36px;
+}
+
+.home-filter__page-btn {
+    display: flex;
+    flex: 1;
+    background-color: var(--white-color);
+    text-decoration: none;
+    border-right: 1px solid #eee;
+}
+
+.home-filter__page-btn--disabled {
+    background-color: #f9f9f9;
+    cursor: default;
+}
+
+.home-filter__page-btn--disabled .home-filter__page-icon {
+    color: #ccc;
+}
+
+.home-filter__page-icon {
+    font-size: 1.4rem;
+    margin: auto;
+    color: #555;
+}
+
+.home-product {
+    margin-bottom: 10px;
+}
+
+.home-product-item {
+    display: block;
+    position: relative;
+    margin-top: 10px;
+    background-color: var(--white-color);
+    /* padding-left: 10px; */
+    border-radius: 2px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .1); /*Bóng đổ*/
+    transition: transform ease-in 0.1s; /*Khi có chuyển động thì tạo animation, transition: kiểu chuyển động, 
+    kiểu animaion, thời gian chuyển động*/
+    will-change: transform; /*Trình duyệt tối ưu chuyển động transform*/ 
+    text-decoration: none;
+}
+
+.home-product-item:hover {
+    transform: translateY(-1); /*Chuyển động theo chiều dọc lên trên 1 px*/
+    box-shadow: 0 1px 20px 0 rgba(0, 0, 0, .05);
+}
+
+.home-product-item__img {
+    padding-top: 100%; /*Chiều ngang của hình bằng chiều ngang của thẻ chứa nó, 100% này là bằng 100% width 
+    của thẻ chứa nó*/
+    background-repeat: no-repeat; /*Nếu hình nhỏ hơn kích thước của thẻ chứa nó thì sẽ xảy ra hiện tượng bị 
+    lặp ảnh, thêm thuộc tính này vào để bỏ đi hiện tượng đó*/
+    background-size: contain; /*Nếu hình lớn hơn kích thước của thẻ chứa nó thì chúng ta chỉ có thể thấy được
+    một góc của bức ảnh do đó thêm thuộc tính này vào để bảo toàn kích thước ảnh và làm cho ảnh vừa với thẻ 
+    chứa nó*/
+    background-position: top center; /*Khi ảnh dài quá và không thể hiện ra được đầy đủ thì dùng thuộc tính này 
+    để display focus vào trọng tâm lên phía trên của bức ảnh*/
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+
+}
+
+.home-product-item__container {
+    padding: 10px;
+}
+
+.home-product-item__name {
+    color: rgba(0,0,0,.87);
+    font-size: 1.4rem;
+    font-weight: 400;
+    height: 3.6rem;
+    margin: 0;
+    margin-bottom: 10px;
+    line-height: 1.8rem; /*Giới hạn chiều cao của tên sản phẩm xuất hiện tối đa trên 2 dòng*/
+    overflow: hidden; /*Tên sản phẩm lớn hơn line-height, sẽ bị "chọc" ra và xuống dòng thứ 3, thì ta dùng thuộc 
+    tính này để ẩn đi các dòng đó và chỉ hiện tối đa 2 dòng mà thôi*/
+    
+    /*Cách làm xuất hiện dấu 3 chấm*/
+    display: -webkit-box; /*Chỉ chạy trên các browser có core là webkit*/ 
+    display: block; /*Do đó phải thêm thuộc tính này vào để trình duyệt mà ko nhận được webkit thì nó sẽ set
+    thuộc tính block cho element này*/
+    -webkit-box-orient: vertical; /*Hướng của các dòng chữ, nếu từ trên xuống dưới thì là vertical*/
+    -webkit-line-clamp: 2; /*Giúp giới hạn phần content của một khối theo số dòng được set và xuất hiện dấu 3
+    chấm tại dòng đó*/
+
+    /*Một số trình duyệt không support webkit-line-clamp thì dùng 2 thuộc tính dưới đây*/
+    
+    /*Không cho chữ xuống dòng (chỉ có tác dụng được trên 1 dòng)*/
+    /* white-space: nowrap; */
+    
+    /*Chặn lại nếu chữ vượt quá 1 dòng và thêm dấu 3 chấm*/
+    /* text-overflow: ellipsis;  */
+
+}
+
+.home-product-item__price {
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: baseline; /*Giúp cho các flex item thẳng hàng với nhau giữa trên baseline (chân dòng)*/
+    flex-wrap: wrap; /*Khi flex item vượt quá độ dài thẻ chứa nó thì xuống hàng*/
+}
+
+.home-product-item__price-old {
+    color: rgba(0,0,0,.54);
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-right: 6px;
+    text-decoration: line-through;
+}
+
+.home-product-item__price-current {
+    color: #ee4d2d;
+    font-size: 1.6rem;
+    font-weight: 400;
+}
+
+.home-product-item__action {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.home-product-item__like {
+
+}
+
+i.home-product-item__like-icon-fill {
+    color: #F63D30;
+    display: none;
+}
+
+.home-product-item__like--liked .home-product-item__like-icon-fill {
+    display: inline-block;
+}
+
+.home-product-item__like--liked .home-product-item__like-icon-empty {
+    display: none;
+}
+
+.home-product-item__rating {
+    font-size: 0.7rem;
+
+    /* Trong trường hợp không thể làm nhỏ icon hơn nữa bằng cách điều chỉnh font-size thì dùng các thuộc tính dưới đây: */
+    /*Điều chỉnh kích thước của icon mà không làm icon bị "hụt" vào*/
+    /* transform-origin: scale(0.6); */
+    color: #D5D5D5;
+    margin-left: auto; /*Đẩy ngôi sao sát vào chữ mặc cho tính chất space-between của thuộc tính flex*/
+    margin-top: -1px;/*Đẩy ngôi sao lên ngang với dòng chữ đã bán*/
+}
+
+.home-product-item__star--gold {
+    color: #FFCE3E;
+}
+
+.home-product-item__sold {
+    font-size: 1.2rem;
+    color:var(--text-color);
+    margin-left: 6px;
+}
+
+.home-product-item__origin {
+    display: flex;
+    justify-content: space-between;
+    color: #595959;
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.home-product-item__brand {
+
+}
+
+.home-product-item__origin-name {
+
+}
+
+.home-product-item__favourite {
+    position: absolute;
+    top:10px;
+    left:-4px;
+    color: var(--primary-color);
+    background-color: currentColor;
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.6rem;
+    padding-right: 4px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.home-product-item__favourite span {
+    color: var(--white-color);
+}
+
+.home-product-item__favourite i{
+    color: var(--white-color);
+    font-size: 0.9rem;
+    margin: 0 2px 0 5px;
+}
+
+/*Phần "ngoặt" lại của phần "yêu thích"*/
+.home-product-item__favourite::after {
+    content: "";
+    display: block;
+    position: absolute;
+    border-top: 3px solid currentColor; /*Ăn theo màu được set gần nhất*/
+    border-left: 3px solid transparent;
+    left: 0;
+    bottom: -2px;
+    filter: brightness(60%); /*Giảm độ sáng của màu*/
+}
+
+.home-product-item__sale-off {
+    position: absolute;
+    top:0;
+    right:0;
+    width: 40px;
+    height: 36px;
+    text-align: center;
+    background-color: rgba(255, 216, 64, 0.94);
+    border-top-right-radius: 2px;
+}
+
+/* làm phần "vạt" của tag "giảm giá" */
+.home-product-item__sale-off::after {
+    content:"";
+    position: absolute;
+    left:0;
+    bottom: -4px;
+    border-width: 0 20px 4px;
+    border-style: solid;
+    border-color: transparent rgba(255, 216, 64, 0.94) transparent rgba(255, 216, 64, 0.94)
+}
+
+
+
+.home-product-item__sale-off-percent {
+    color:#EE4D2D;
+    font-weight: 600;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    position: relative;
+    top: 2px;
+}
+
+.home-product-item__sale-off-lable {
+    color: var(--white-color);
+    font-size: 1.3rem;
+    line-height: 1.3rem;
+    font-weight: 600;
+    position: relative;
+    top: 2px;
+}
+
+.home-product__pagination {
+    margin: 48px 0 32px;
+    padding-left: 0;
+}
+
+.footer {
+    border-top: 4px solid var(--primary-color);
+    padding-top: 16px;
+    background-color: #fbfbfb;
+}
+
+.footer__heading {
+    color:var(--text-color);
+    font-size: 1.6rem;
+    margin-top: 60px;
+    margin-bottom: 20px;
+}
+
+.footer-list {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-item {
+}
+
+.footer-item__link {
+    text-decoration: none;
+    color: #AAA;
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.footer-item__link:hover {
+    color: #EE4D2D;
+}
+
+.footer__heading {
+
+}
+
+.footer__download {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer__download-apps {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer__qr-img {
+    position: relative;
+    top:-3px;
+    width: 40%;
+    margin-right: 10px;
+    background-color: var(--white-color);
+    box-shadow: 0 1px 2px #ccc;
+    border-radius: 2px;
+    padding: 3px;
+}
+
+.footer__qr-download-app-link {
+    color:transparent;
+    text-decoration: none;
+    margin-right: 0;
+}
+
+.footer__qr-download-app-img{
+    display: block;
+    width: 60%;
+    background-color: var(--white-color);
+    margin-bottom: 8px;
+    padding: 5px;
+    box-shadow: 0 1px 2px #ccc;
+    border-radius: 2px;
+    flex: 1; 
+}
+
+.footer__bottom {
+    background-color: #F5F5F5;
+    text-align: center;
+    color: var(--text-color);
+    padding-top: 42px;
+    margin-top: 10px;
+}
+
+.footer__text {
+    font-size: 1.2rem;
+}
